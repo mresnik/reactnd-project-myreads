@@ -3,7 +3,6 @@ import CreateShelves from './CreateShelves'
 import SearchForm from './SearchForm'
 import * as BooksAPI from './BooksAPI'
 import { Route } from 'react-router-dom'
-/*import { Link } from 'react-router-dom'*/
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -30,7 +29,7 @@ class BooksApp extends React.Component {
     return (
         <div className="app">
           <Route path="/search" render={() => (
-              <SearchForm newShelf={this.newShelf}/>
+              <SearchForm newShelf={this.newShelf} currentBooks={this.state.books} shelfBooks={this.state.books}/>
           )}/>
           <Route exact path="/" render={() => (
               <CreateShelves books={this.state.books} newShelf={this.newShelf}/>

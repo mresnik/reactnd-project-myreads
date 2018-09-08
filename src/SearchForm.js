@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './BooksAPI'
 import { Link } from 'react-router-dom'
-/*import PropTypes from 'prop-types'*/
 import Book from './Book'
+
 class SearchForm extends Component  {
 
   state = {
@@ -11,32 +11,24 @@ class SearchForm extends Component  {
   }
 
 updateQuery = (query) => {
-this.setState({ query: query })
-if (query.length >0) {
-  this.bookSearch(query)
-} else {
-  this.setState({ newBooks: [] })
-}}
+  this.setState({ query: query })
+  if (query.length >0) {
+    this.bookSearch(query)
+    } else {
+    this.setState({ newBooks: [] })
+  }}
 
 bookSearch = (query) => {
 
 BooksAPI.search(query).then((newBooks) => {
   if  (!query) {
     this.setState({ newBooks: [] })
-  } else if (newBooks.error) {
-        this.setState({ newBooks: [] })
-  } else {
+    } else if (newBooks.error) {
+    this.setState({ newBooks: [] })
+    } else {
     this.setState({ newBooks: newBooks })
-}})
-}
-
-shelfValue = (book) => {
-  (console.log("hello"))
-  let thisShelf = book.shelf
-  if (thisShelf ='') {
-    book.shelf = 'none';
-  }
-}
+    }}
+  )}
 
   render() {
     return (
@@ -54,11 +46,19 @@ shelfValue = (book) => {
         </div>
         <div className="search-books-results">
             <ol className="books-grid">
-            {this.state.newBooks.map(book => (
+            {this.state.newBooks.map(book => {
+                let currentShelf = 'none';
+
+                this.props.shelfBooks.map(shelfBook => (
+                  (shelfBook.id === book.id) && (currentShelf = shelfBook.shelf)
+                ));
+
+              return(
                 <li key={book.id}>
-                  <Book book={book} newShelf={this.props.newShelf} shelfValue={this.shelfValue}/>
+                  <Book book={book} newShelf={this.props.newShelf} currentShelf={currentShelf}  />
                 </li>
-          )
+              )
+            }
           )}
             </ol>
           </div>
