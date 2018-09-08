@@ -1,70 +1,58 @@
 import React, { Component } from 'react'
-import * as BooksAPI from './BooksAPI'
+//import * as BooksAPI from './BooksAPI'
+import { Link } from 'react-router-dom'
+import Book from './Book'
 
 const shelves = [
-        { display: "Currently Reading", shelf: "currentlyReading"},
-        { display: "Want To Read", shelf: "wantToRead"},
-        { display: "Read", shelf: "read"}
+        { display: "Currently Reading", shelf: "currentlyReading", id: "1"},
+        { display: "Want To Read", shelf: "wantToRead", id: "2"},
+        { display: "Read", shelf: "read", id: "3"}
       ]
 
 class CreateShelves extends Component {
 
-  state = {
-    books: []
-  }
 
 
 
-      componentDidMount() {
-      BooksAPI.getAll().then((books) => {
-        this.setState({ books })
-        console.log(books)
-      })
-    }
+
 
   render() {
-        const { books } = this.state
           return (
+
+            <div>
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
+                </div>
+
           <div className="bookshelf">
     {shelves.map((shelf) => (
-              <div>
-                <h2 key={shelf.index} className="bookshelf-title">{shelf.display}</h2>
+              <div key={shelf.id}>
+                <h2 className="bookshelf-title">{shelf.display}</h2>
                 <div className="bookshelf-books">
-                  <ol className="books-grid">
-                      {books.map((book) => (
-                        <div>
-                    {book.shelf === shelf.shelf &&
-                    <li key={book.index}>
-
-                      <div className="book">
-                        <div className="book-top">
-                          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                          <div className="book-shelf-changer">
-                            <select>
-                              <option value="move" disabled>Move to...</option>
-                              <option value="currentlyReading">Currently Reading</option>
-                              <option value="wantToRead">Want to Read</option>
-                              <option value="read">Read</option>
-                              <option value="none">None</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="book-title">{book.title}</div>
-                        <div className="book-authors">{book.authors}</div>
+                      <ol className="books-grid">
+                          {this.props.books.map((book) => (
+                            <div key={book.id}>
+                        {book.shelf === shelf.shelf &&
+                        <li>
+                          <Book book={book} newShelf={this.props.newShelf}
+                          currentShelf={shelf.shelf}
+                          />
+                        </li>
+                      }
                       </div>
-
-                    </li>
-                  }
-                  </div>
-                  ))}
-                  </ol>
+                      ))}
+                      </ol>
                 </div>
               </div>
-
-
-
             ))}
+
+
             </div>
+              <div className="open-search">
+                <Link to='/search'>Add a book</Link>
+              </div>
+            </div></div>
   )
 
 }}
